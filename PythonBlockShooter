@@ -1,0 +1,199 @@
+import pygame
+
+# Initialize Pygame
+pygame.init()
+
+# Set screen dimensions
+screen_width = 775
+screen_height = 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+
+# Set title
+pygame.display.set_caption("My Game")
+
+# Define clock for controlling FPS
+clock = pygame.time.Clock()
+
+# Create a player sprite for the mouse block object
+player_x = 400
+player_y = 550
+player_width = 50
+player_height = 10
+player_color = (255, 0, 0)
+
+# Projectile settings
+projectile_width = 2
+projectile_height = 2
+projectile_color = (0, 255, 0)
+projectiles = []
+
+# Block settings (store them in a list for easy manipulation
+blocks = [
+    pygame.Rect(5 + i * 55, 5, 50, 50) for i in range(14)
+    ]
+block_color = (255, 0, 0)
+
+# Create sprites for each block to be destroyed at the top
+#block1_x = 5
+#block1_y = 5
+#block1_width = 50
+#block1_height = 50
+#block1_color = (255, 0, 0)
+
+#block2_x = 60
+#block2_y = 5
+#block2_width = 50
+#block2_height = 50
+#block2_color = (255, 0, 0)
+
+#block3_x = 115
+#block3_y = 5
+#block3_width = 50
+#block3_height = 50
+#block3_color = (255, 0, 0)
+
+#block4_x = 170
+#block4_y = 5
+#block4_width = 50
+#block4_height = 50
+#block4_color = (255, 0, 0)
+
+#block5_x = 225
+#block5_y = 5
+#block5_width = 50
+#block5_height = 50
+#block5_color = (255, 0, 0)
+
+#block6_x = 280
+#block6_y = 5
+#block6_width = 50
+#block6_height = 50
+#block6_color = (255, 0, 0)
+
+#block7_x = 335
+#block7_y = 5
+#block7_width = 50
+#block7_height = 50
+#block7_color = (255, 0, 0)
+
+#block8_x = 390
+#block8_y = 5
+#block8_width = 50
+#block8_height = 50
+#block8_color = (255, 0, 0)
+
+#block9_x = 445
+#block9_y = 5
+#block9_width = 50
+#block9_height = 50
+#block9_color = (255, 0, 0)
+
+#block10_x = 500
+#block10_y = 5
+#block10_width = 50
+#block10_height = 50
+#block10_color = (255, 0, 0)
+
+#block11_x = 555
+#block11_y = 5
+#block11_width = 50
+#block11_height = 50
+#block11_color = (255, 0, 0)
+
+#block12_x = 610
+#block12_y = 5
+#block12_width = 50
+#block12_height = 50
+#block12_color = (255, 0, 0)
+
+#block13_x = 665
+#block13_y = 5
+#block13_width = 50
+#block13_height = 50
+#block13_color = (255, 0, 0)
+
+#block14_x = 720
+#block14_y = 5
+#block14_width = 50
+#block14_height = 50
+#block14_color = (255, 0, 0)
+
+# Game Loop
+running = True
+while running:
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        # Shoot projectile when spacebar is pressed
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                # Create a projectile at the center of the player
+                projectile_x = player_x + player_width // 2 - projectile_width // 2
+                projectile_y = player_y
+                projectiles.append(pygame.Rect(projectile_x, projectile_y, projectile_width, projectile_height))
+
+    # Get mouse position
+    mouse_x, mouse_y, = pygame.mouse.get_pos()
+
+    # Update player position to the follow the mouse horizontally
+    player_x = mouse_x - player_width // 2
+
+    # Keep player within screen bounds
+    player_x = max(0, player_x)
+    player_x = min(screen_width - player_width, player_x)
+
+    # Move projectiles upward
+    for projectile in projectiles[:]:
+        projectile.y -= 5
+
+        # Remove projectiles that leave the screen
+        if projectile.y < 0:
+            projectiles.remove(projectile)
+
+        # Check for collisions with blocks
+        for block in blocks[:]:
+            if projectile.colliderect(block):
+                blocks.remove(block)
+                if projectile in projectiles:
+                    projectiles.remove(projectile)
+                break
+
+    # Clear screen
+    screen.fill((0, 0, 0))
+
+    # Draw blocks
+    for block in blocks:
+        pygame.draw.rect(screen, block_color, block)
+
+    # Draw projectiles
+    for projectile in projectiles:
+        pygame.draw.rect(screen, projectile_color, projectile)
+
+    # Draw blocks
+    #pygame.draw.rect(screen, block1_color, (block1_x, block1_y, block1_width, block1_height))
+    #pygame.draw.rect(screen, block2_color, (block2_x, block2_y, block2_width, block2_height))
+    #pygame.draw.rect(screen, block3_color, (block3_x, block3_y, block3_width, block3_height))
+    #pygame.draw.rect(screen, block4_color, (block4_x, block4_y, block4_width, block4_height))
+    #pygame.draw.rect(screen, block5_color, (block5_x, block5_y, block5_width, block5_height))
+    #pygame.draw.rect(screen, block6_color, (block6_x, block6_y, block6_width, block6_height))
+    #pygame.draw.rect(screen, block7_color, (block7_x, block7_y, block7_width, block7_height))
+    #pygame.draw.rect(screen, block8_color, (block8_x, block8_y, block8_width, block8_height))
+    #pygame.draw.rect(screen, block9_color, (block9_x, block9_y, block9_width, block9_height))
+    #pygame.draw.rect(screen, block10_color, (block10_x, block10_y, block10_width, block10_height))
+    #pygame.draw.rect(screen, block11_color, (block11_x, block11_y, block11_width, block11_height))
+    #pygame.draw.rect(screen, block12_color, (block12_x, block12_y, block12_width, block12_height))
+    #pygame.draw.rect(screen, block13_color, (block13_x, block13_y, block13_width, block13_height))
+    #pygame.draw.rect(screen, block14_color, (block14_x, block14_y, block14_width, block14_height))
+
+    # Draw the player bar at the bottom
+    pygame.draw.rect(screen, player_color, (player_x, player_y, player_width, player_height))
+        
+    # Update display
+    pygame.display.flip()
+
+    # Control frame rate
+    clock.tick(60)
+
+# Quit Pygame
+pygame.quit()
